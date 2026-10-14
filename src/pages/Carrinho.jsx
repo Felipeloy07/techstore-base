@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router'
-import SugestaoItem from '../components/SugestaoItem'
-import { agruparItens, calcularTotal } from '../utils/carrinho'
+import ProdutoCard from '../components/ProdutoCard'
+import { agruparItens, calcularTotal, filtrarProdutosDisponiveis } from '../utils/carrinho'
 import { validarCupom } from '../utils/cupons'
 import { formatarPreco } from '../utils/formatarPreco'
 
@@ -13,8 +13,10 @@ export default function Carrinho({ carrinho, produtos, clienteAtual, onAdicionar
   const itens = agruparItens(carrinho)
   const total = calcularTotal(carrinho)
   const totalComDesconto = cupomAplicado ? total * (1 - cupomAplicado.desconto) : total
+  const valorFaltaFrete = Math.max(0, 200 - totalComDesconto)
+  const mensagemFrete = totalComDesconto >= 200 ? 'Você ganhou frete grátis!' : `Falta ${formatarPreco(valorFaltaFrete)} para ganhar frete grátis`
 
-  const sugestoes = produtos
+  const sugestoes = filtrarProdutosDisponiveis(produtos)
     .filter((produto) => !carrinho.find((item) => item.id === produto.id))
     .slice(0, 3)
 
@@ -93,6 +95,10 @@ export default function Carrinho({ carrinho, produtos, clienteAtual, onAdicionar
               <span>{cupomAplicado.desconto * 100}%</span>
             </p>
           )}
+          <p className="resumo-linha">
+            <span>Frete</span>
+            <span>{mensagemFrete}</span>
+          </p>
           <p className="total">
             <span>Total</span>
             <span>{formatarPreco(totalComDesconto)}</span>
@@ -101,9 +107,9 @@ export default function Carrinho({ carrinho, produtos, clienteAtual, onAdicionar
       </div>
 
       <h2>Você também pode gostar</h2>
-      <div className="sugestoes">
+      <div className="grade sugestoes">
         {sugestoes.map((produto) => (
-          <SugestaoItem key={produto.id} produto={produto} onAdicionar={onAdicionar} />
+          <ProdutoCard key={produto.id} produto={produto} onAdicionar={onAdicionar} />
         ))}
       </div>
     </section>

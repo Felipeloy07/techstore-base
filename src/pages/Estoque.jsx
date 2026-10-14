@@ -1,7 +1,27 @@
 // Página usada pelo time de estoque para acompanhar a quantidade de cada produto
-export default function Estoque({ produtos }) {
+export default function Estoque({ produtos, listaEspera = [] }) {
   // slice cria uma cópia, para o sort não alterar a lista original
   const ordenados = produtos.slice().sort((a, b) => a.estoque - b.estoque)
+
+  const clientesPorProduto = listaEspera.reduce((acumulador, item) => {
+    const produto = produtos.find((produtoAtual) => produtoAtual.id === item.produtoId)
+    if (!produto) return acumulador
+
+    const produtoId = item.produtoId
+    if (!acumulador[produtoId]) {
+      acumulador[produtoId] = {
+        produto,
+        clientes: [],
+      }
+    }
+
+    acumulador[produtoId].clientes.push({
+      nome: item.nome,
+      email: item.email,
+    })
+
+    return acumulador
+  }, {})
 
   return (
     <section>
@@ -36,6 +56,37 @@ export default function Estoque({ produtos }) {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div style={{ marginTop: '2rem' }}>
+        <h2>Clientes esperando produto voltar</h2>
+
+        {Object.keys(clientesPorProduto).length === 0 ? (
+          <p className="aviso">Nenhum cliente na lista de espera no momento.</p>
+        ) : (
+          <div className="tabela-moldura">
+            <table className="tabela">
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Cliente</th>
+                  <th>E-mail</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.values(clientesPorProduto).flatMap(({ produto, clientes }) =>
+                  clientes.map((cliente, index) => (
+                    <tr key={`${produto.id}-${cliente.email}-${index}`}>
+                      <td>{produto.title}</td>
+                      <td>{cliente.nome}</td>
+                      <td>{cliente.email}</td>
+                    </tr>
+                  )),
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </section>
   )

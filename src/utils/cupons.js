@@ -10,9 +10,13 @@ export function validarCupom(codigo, cliente) {
     return { valido: false }
   }
 
-  if (codigoNormalizado === 'PRIMEIRACOMPRA' && cliente.pedidosAnteriores > 0) {
-    return { valido: false }
+  if (codigoNormalizado === 'PRIMEIRACOMPRA') {
+    const jaComprou = !cliente || Number(cliente.pedidosAnteriores ?? 0) > 0
+
+    if (jaComprou) {
+      return { valido: false }
+    }
   }
 
-  return { valido: true, desconto }
+  return { valido: true, desconto: 0.1 }
 }

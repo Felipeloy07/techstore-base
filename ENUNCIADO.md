@@ -30,6 +30,7 @@ Você assumiu a manutenção da TechStore, uma loja virtual em React que já est
 ---
 
 ## Obrigatório 2: Produtos esgotados
+## FEITO
 
 **Mensagem do comercial, 7 de outubro**
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import ProdutoCard from '../components/ProdutoCard'
+import { filtrarProdutosDisponiveis } from '../utils/carrinho'
 
 const CATEGORIAS = [
   { id: 'todas', nome: 'Todas' },
@@ -14,10 +15,14 @@ export default function Loja({ produtos, onAdicionar }) {
   const [produtosVisiveis, setProdutosVisiveis] = useState(produtos)
 
   useEffect(() => {
+    const produtosDisponiveis = filtrarProdutosDisponiveis(produtos)
+
     if (categoria === 'todas') {
-      setProdutosVisiveis(produtos)
+      setProdutosVisiveis(produtosDisponiveis)
     } else {
-      setProdutosVisiveis(produtos.filter((produto) => produto.category === categoria))
+      setProdutosVisiveis(
+        produtosDisponiveis.filter((produto) => produto.category === categoria),
+      )
     }
   }, [categoria, produtos])
 

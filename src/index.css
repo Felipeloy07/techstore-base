@@ -787,6 +787,52 @@ h2 {
   text-overflow: ellipsis;
 }
 
+/* Painel do lojista */
+
+.painel-lojista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-5);
+}
+
+.painel-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--espaco-4);
+}
+
+.painel-card {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  padding: var(--espaco-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+}
+
+.painel-card span {
+  color: var(--cor-texto-suave);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.painel-card strong {
+  font-size: 1.5rem;
+  letter-spacing: -0.04em;
+}
+
+.painel-blocos {
+  display: grid;
+  gap: var(--espaco-5);
+}
+
+@media (min-width: 768px) {
+  .painel-blocos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 /* Estoque */
 
 .tabela-moldura {
